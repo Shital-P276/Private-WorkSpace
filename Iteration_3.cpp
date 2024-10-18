@@ -1,3 +1,29 @@
+/*
+TODO :
+1] Store it in heap
+2] Should be dynamic (no fixed size array)
+3] Use a single array (person) instead of student & Teacher
+4] Use flags to identify if person[cnt] is teacher or student -> set flag while entering details ->when displaying differentiate by using flag
+5] Research on how to identify which element is at current position in array (dynamic casting methods)
+6] Use lecture stuff (late-binding)
+7] Use linked lists instead of array
+*/
+
+/*
+ITERATION 3: 
+> TODO Completed 1, 3, 4, 6 , 2 ,7
+> Added Linkedlist
+> Stored objects on Heap
+> Used a single array to store person pointers (create variables of Abs Class ) that point to heap objects instead of 2 arrays of student and teacher
+> Used isTeacher flag to identify student or teacher from the people array
+> Used cout in classes of student & teacher( I think can be fixed using a common function getmoney() & PVF with overriding (late-binding)) 
+> Late Binding  implemented as using pure virtual func and overriding methods in child classes
+  the call made is people[i]->display() the compiler determines obj is student or class at runtime 
+> Created Personlist as pointer class and added methods such as addperson & displayAll readability in main
+> Using destructors to remove mem leaks
+*/
+
+
 #include <iostream>
 #include <cstring>
 using namespace std;
@@ -59,9 +85,10 @@ private:
     Person* head;
 
 public:
-    PersonList() : head(nullptr) {}
-
-    ~PersonList() {
+    PersonList() : head(nullptr) {} // assigning nullptr to new node generated with member initalizer list 
+    
+    //destructor
+    ~PersonList() { 
         Person* current = head;
         while (current != nullptr) {
             Person* next = current->next;
@@ -70,11 +97,21 @@ public:
         }
     }
 
-    void addPerson(Person* newPerson) {
+    void addPerson(Person* newPerson) { // adds person at beginning of the list
         newPerson->next = head;
         head = newPerson;
     }
-
+    
+    void displayCategory(bool isTeacher) {
+        Person* current = head;
+        while (current != nullptr) {
+            if (current->getIsTeacher() == isTeacher) { // compares flags to identify student or teacher
+                current->display(); // example of late-binding
+            }
+            current = current->next;
+        }
+    }
+    
     void displayAll() {
         cout << "\nAll Members: ";
         cout << "\nStudents:" << endl;
@@ -86,17 +123,6 @@ public:
         cout << "ID  | Name     | Salary" << endl;
         cout << "----------------------------" << endl;
         displayCategory(true);
-    }
-
-private:
-    void displayCategory(bool isTeacher) {
-        Person* current = head;
-        while (current != nullptr) {
-            if (current->getIsTeacher() == isTeacher) {
-                current->display();
-            }
-            current = current->next;
-        }
     }
 };
 
@@ -118,8 +144,7 @@ int main() {
                 cout << "\nEnter ID: ";
                 cin >> id;
                 cout << "Enter Name: ";
-                cin.ignore();
-                cin.getline(name, sizeof(name));
+                cin >> name;
 
                 if (choice == 1) {
                     cout << "Enter Fees: ";
