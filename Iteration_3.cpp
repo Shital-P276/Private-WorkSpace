@@ -1,4 +1,11 @@
 /*
+Author Details: 
+  Shital Manoj Patil
+  2324001011
+  SY B77
+*/
+
+/*
 TODO :
 1] Store it in heap
 2] Should be dynamic (no fixed size array)
@@ -12,14 +19,14 @@ TODO :
 /*
 ITERATION 3: 
 > TODO Completed 1, 3, 4, 6 , 2 ,7
-> Added Linkedlist
-> Stored objects on Heap
+> Utilising Linkedlist instead of array for removal of upperbound(MAX) limitations
+> Stored objects on Heap 
 > Used a single array to store person pointers (create variables of Abs Class ) that point to heap objects instead of 2 arrays of student and teacher
 > Used isTeacher flag to identify student or teacher from the people array
-> Used cout in classes of student & teacher( I think can be fixed using a common function getmoney() & PVF with overriding (late-binding)) 
-> Late Binding  implemented as using pure virtual func and overriding methods in child classes
-  the call made is people[i]->display() the compiler determines obj is student or class at runtime 
-> Created Personlist as pointer class and added methods such as addperson & displayAll readability in main
+> *Used cout in classes of student & teacher( I think can be fixed using a common function getmoney() & PVF with overriding (late-binding)) 
+> Late Binding implemented as using pure virtual func and overriding methods in child classes
+  the call made is people[i]->display() the compiler determines obj is student or teacher at runtime 
+> Created Personlist as pointer class and added methods such as addperson & displayAll for improved readability in main
 > Using destructors to remove mem leaks
 */
 
@@ -38,7 +45,7 @@ public:
     Person* next;  // Pointer to the next person in the list
 
     Person() : next(nullptr) {}
-    virtual ~Person() {}
+    virtual ~Person() {} //allows to call the correct destructor of child classes
 
     unsigned int getID() const { return id; }
     const char* getName() const { return name; }
@@ -51,7 +58,7 @@ public:
     }
     void setIsTeacher(bool teacher) { isTeacher = teacher; }
 
-    virtual void display() = 0;
+    virtual void display() = 0; // PVF
 };
 
 class Student : public Person {
@@ -60,7 +67,7 @@ private:
 
 public:
     Student() { this->setIsTeacher(false); }
-    int getFees() const { return fees; }
+    //int getFees() const { return fees; } unnecessary as 'fees' can be directly accessed
     void setFees(int studentFees) { fees = studentFees; }
     void display() override {
         cout << this->getID() << " | " << this->getName() << " | " << fees << endl;
@@ -73,7 +80,7 @@ private:
 
 public:
     Teacher() { this->setIsTeacher(true); }
-    int getSalary() const { return salary; }
+    //int getSalary() const { return salary; } unnecessary as 'salary' can be directly accessed
     void setSalary(int teacherSalary) { salary = teacherSalary; }
     void display() override {
         cout << this->getID() << " | " << this->getName() << " | " << salary << endl;
